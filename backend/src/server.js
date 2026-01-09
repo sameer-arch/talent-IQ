@@ -8,6 +8,7 @@ import { inngest, functions } from "./lib/inngest.js";
 import { clerkMiddleware } from "@clerk/express";
 import { protectRoute } from "./middleware/protectRoute.js";
 import chatRoute from "./routes/chatRoute.js";
+import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
 
@@ -19,12 +20,12 @@ app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
-app.use('api/chat', chatRoute)
+app.use("api/chat", chatRoute);
+app.use("api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
-
 
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
