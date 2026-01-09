@@ -1,10 +1,13 @@
 import express from "express";
 import path from "path";
+import cors from "cors";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import { serve } from "inngest/express";
-import cors from "cors";
 import { inngest, functions } from "./lib/inngest.js";
+import { clerkMiddleware } from "@clerk/express";
+import { protectRoute } from "./middleware/protectRoute.js";
+import chatRoute from "./routes/chatRoute.js";
 
 const app = express();
 
@@ -13,16 +16,15 @@ const __dirname = path.resolve();
 // middleware
 app.use(express.json());
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use('api/chat', chatRoute)
 
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
 
-app.get("/books", (req, res) => {
-  res.status(200).json({ msg: "This is the books endpoint" });
-});
 
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
