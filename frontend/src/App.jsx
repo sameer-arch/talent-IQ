@@ -1,3 +1,4 @@
+import { Navigate, Route, Routes } from "react-router";
 import "./App.css";
 import {
   SignedIn,
@@ -5,24 +6,23 @@ import {
   SignInButton,
   UserButton,
   SignOutButton,
+  useUser,
 } from "@clerk/clerk-react";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import ProblemsPage from "./ProblemsPage";
 
 function App() {
+  const { isSignedIn } = useUser();
   return (
-    <>
-      <h1>Welcome to the app</h1>
-      <header>
-        <SignedOut>
-          <SignInButton mode="modal">
-            <button className="">Login</button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <SignOutButton />
-        </SignedIn>
-        <UserButton />
-      </header>
-    </>
+    <Routes>
+      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/about" element={<AboutPage />}></Route>
+      <Route
+        path="/problems"
+        element={isSignedIn ? <ProblemsPage /> : <Navigate to={"/"} />}
+      ></Route>
+    </Routes>
   );
 }
 
