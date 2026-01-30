@@ -9,18 +9,32 @@ import {
   useUser,
 } from "@clerk/clerk-react";
 import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import ProblemsPage from "./ProblemsPage";
+import ProblemsPage from "./pages/ProblemsPage";
+import ProblemPage from "./pages/ProblemPage";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
+
+  // This will get rid of the flickering effect
+  if (!isLoaded) return null;
   return (
     <Routes>
-      <Route path="/" element={<HomePage />}></Route>
-      <Route path="/about" element={<AboutPage />}></Route>
+      <Route
+        path="/"
+        element={!isSignedIn ? <HomePage /> : <Navigate to={"/dashboard"} />}
+      ></Route>
+      <Route
+        path="/dashboard"
+        element={isSignedIn ? <DashboardPage /> : <Navigate to={"/"} />}
+      ></Route>
       <Route
         path="/problems"
         element={isSignedIn ? <ProblemsPage /> : <Navigate to={"/"} />}
+      ></Route>{" "}
+      <Route
+        path="/problem/:id"
+        element={isSignedIn ? <ProblemPage /> : <Navigate to={"/"} />}
       ></Route>
     </Routes>
   );

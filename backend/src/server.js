@@ -6,7 +6,6 @@ import { connectDB } from "./lib/db.js";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./lib/inngest.js";
 import { clerkMiddleware } from "@clerk/express";
-import { protectRoute } from "./middleware/protectRoute.js";
 import chatRoute from "./routes/chatRoute.js";
 import sessionRoutes from "./routes/sessionRoute.js";
 
