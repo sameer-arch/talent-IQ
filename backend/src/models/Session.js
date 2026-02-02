@@ -23,7 +23,7 @@ const sessionSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["active, completed"],
+      enum: ["active", "completed"],
       default: "active",
     },
     callId: {
@@ -31,7 +31,7 @@ const sessionSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Session = mongoose.model("Session", sessionSchema);
